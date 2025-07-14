@@ -1,0 +1,12 @@
+{
+    "python.analysis.extraPaths": [
+        "./repos/1.Travelling_Salesman_Problem",
+        "./repos/2.held-karp",
+        "./repos/3.tsp-with-nn",
+        "./repos/4.py2opt",
+        "./repos/5.Traveling-Salesman-Problem-using-Genetic-Algorithm",
+        "./repos/6.Tabu-Search",
+        "./repos/7.Traveling-Salesman-Algorithm",
+        "./repos/8.GSPH"
+    ]
+}
