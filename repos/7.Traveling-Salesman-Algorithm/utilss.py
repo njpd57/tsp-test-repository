@@ -1,5 +1,5 @@
 from math import sqrt
-from random import randint, uniform
+from random import  uniform
 
 def Distance(a, b):
     return sqrt( (b.x-a.x)*(b.x-a.x) + (b.y-a.y)*(b.y-a.y) )

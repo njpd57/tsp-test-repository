@@ -1,6 +1,6 @@
 import math
 from ant import *
-from utils import translateValue
+from utilss import translateValue
 
 class AntColony(object):
     def __init__(self, variation="ACS", size=5, elitist_weight=1.0, minFactor=0.001, alpha=1.0, beta=3.0,
