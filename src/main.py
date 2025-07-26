@@ -58,8 +58,7 @@ from customCode7 import testFunction as AntSystem
 #GSPH Frontera
 #https://github.com/incfDevuser/gsph_toolkit
 sys.path.append("../repos/8.GSPH")
-from customCode8 import testFunction as GSPH 
-
+from customCode8 import testFunction as GSPH
 
 # Main Parameters
 OUTPUT_FOLDER = "output"
@@ -68,8 +67,8 @@ TABLE_FILE = "comparation.csv"
 
 # Lista de archivos TSP a probar
 TSP_FILE_PATH = "input/"
-#TSP_FILE_LIST = ["eil10.tsp","eil20.tsp","eil51.tsp","berlin52.tsp", "eil76.tsp","bier127.tsp","a280.tsp"]
-#20 instancias
+
+
 TSP_FILE_LIST = [
     "a280.tsp",
     "berlin52.tsp",
@@ -98,13 +97,6 @@ TSP_FILE_LIST = [
     "pr124.tsp",
     "pr136.tsp",
     "pr144.tsp",
-    #"pr152.tsp",
-    #"pr226.tsp",
-    #"pr264.tsp",
-    #"pr299.tsp",
-    #"pr439.tsp",
-    #"pr1002.tsp",
-
 ]
 
 TSPLIB_BKS=[
@@ -165,7 +157,6 @@ def runGSPH():
             gapbks = tspUtils.getGapBKS(instance_bks,cost)
             table.write(f"{instance_name};GSPH_FC;{cost};{instance_bks};{gapbks};{results.get("duration")}\n")
             print(f"\t\t{cost}")       
-
     table.close()
 
 def runTest(_seed=1):
