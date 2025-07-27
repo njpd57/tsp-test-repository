@@ -13,8 +13,11 @@ Paper GTSPH. 07/07/25
 
 """
 
+#Arguments
+import argparse, importlib, time
 import sys
 import os
+
 from datetime import datetime
 import utils.tspUtils as tspUtils
 
@@ -135,6 +138,18 @@ TSPLIB_BKS=[
     259045
 ]
 
+parser = argparse.ArgumentParser(description="Try and Export TSP Heuristics")
+parser.add_argument("tspfile", help="Tspfile to test")
+parser.add_argument("-r","--run-all-test", action="store_true", help="Run and export tests")
+parser.add_argument("-i","--interactive", action="store_true", help="Interactive interface")
+parser.add_argument("-s","--seed",default=0,help="Seed to use in random")
+
+#parser.add_argument("-p","--plot", action="store_true", help="Allow the algorithms to export a PNG of the tours")
+#parser.add_argument("-t","--table-export",action="store_const",const=utils.tspTestLib.DEFAULT_TABLE_RESULTS_FILENAME, help="Search results and export a comparison table")
+
+
+
+
 def runGSPH():
     TABLE_HEADERS = "Instancia;Repositorio;Distancia;BKS;GAPBKS;TiempoEjecución\n"
     currTime = datetime.now()
@@ -158,6 +173,7 @@ def runGSPH():
             table.write(f"{instance_name};GSPH_FC;{cost};{instance_bks};{gapbks};{results.get("duration")}\n")
             print(f"\t\t{cost}")       
     table.close()
+
 
 def runTest(_seed=1):
     functionList = [lambda x:bruteForce(x),
@@ -262,4 +278,11 @@ def runTest(_seed=1):
     table.close()
 
 if __name__ == "__main__":
- runTest()
+    args = parser.parse_args()
+    if args.run_all_test:
+        runTest()
+    
+    if args.tspfile:
+        print(args.tspfile)
+
+        print("Realizing...")
