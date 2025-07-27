@@ -142,6 +142,7 @@ parser = argparse.ArgumentParser(description="Try and Export TSP Heuristics")
 parser.add_argument("tspfile", help="Tspfile to test")
 parser.add_argument("-r","--run-all-test", action="store_true", help="Run and export tests")
 parser.add_argument("-i","--interactive", action="store_true", help="Interactive interface")
+parser.add_argument("-ix","--include-exact", action="store_true", help="Include exact methods")
 parser.add_argument("-s","--seed",default=0,help="Seed to use in random")
 
 #parser.add_argument("-p","--plot", action="store_true", help="Allow the algorithms to export a PNG of the tours")
@@ -283,6 +284,4 @@ if __name__ == "__main__":
         runTest()
     
     if args.tspfile:
-        print(args.tspfile)
-
-        print("Realizing...")
+        tspUtils.runTest(tspFile=args.tspfile,seed=args.seed,includeExacts=args.include_exact)

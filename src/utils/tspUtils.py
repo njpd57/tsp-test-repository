@@ -1,7 +1,7 @@
 from datetime import datetime
 import os
+import tsplib95
 import sys
-import tsplib
 #Brute Foce | B&B DFS | Simulated Annealing
 #https://github.com/Kacper-Sleziak/Travelling_Salesman_Problem
 sys.path.append("../repos/1.Travelling_Salesman_Problem")
@@ -52,22 +52,42 @@ TABLE_HEADERS = "Instancia;Repositorio;Distancia;BKS;GAPBKS;TiempoEjecución\n"
 
 # Lista de archivos TSP a probar
 TSP_FILE_PATH = "input/"
+TSP_LIB_BKS_FILE = "input/bks.txt"
 TSPLIB_BKS  = []
 
-def generateFunctionList(POPULATION_SIZE=1000,SEED=1):
-    return [
-        {"name": "BruteForce", "function": lambda x:bruteForce(x)},
-        {"name": "BranchAndBound", "function": lambda x:branchAndBound(x)},
-        {"name": "HeldKarp", "function": lambda x:heldKarp(x)},
-        {"name": "NearestNeighbour", "function": lambda x:nearestNeighbour(x,SEED)},
-        {"name": "GeneticAlgorithm", "function": lambda x:geneticAlgorithm(x,POPULATION_SIZE)},
-        {"name": "TabuSearch", "function": lambda x:tabuSearch(x)},
-        {"name": "AntSystem", "function": lambda x:AntSystem(x)},
-        {"name": "AntSystemElitist", "function": lambda x:AntSystem(x,mode="Elitist")},
-        {"name": "AntSystemMaxMin", "function": lambda x:AntSystem(x,mode="MaxMin")},
-        {"name": "GsphFC", "function": lambda x:GSPH(x)}
-    ]
+def generateFunctionList(POPULATION_SIZE=1000,SEED=1,includeExacts=False,includeGSPH=False):
+    functionList = []
 
+    if(includeExacts):
+        function.append({"name": "BruteForce", "function": lambda x:bruteForce(x)})
+        function.append({"name": "BranchAndBound", "function": lambda x:branchAndBound(x)})
+        function.append({"name": "HeldKarp", "function": lambda x:heldKarp(x)})
+            
+    functionList.append({"name": "NearestNeighbour", "function": lambda x:nearestNeighbour(x,SEED)})
+    functionList.append({"name": "GeneticAlgorithm", "function": lambda x:geneticAlgorithm(x,POPULATION_SIZE)})
+    functionList.append({"name": "TabuSearch", "function": lambda x:tabuSearch(x)})
+    functionList.append({"name": "AntSystem", "function": lambda x:AntSystem(x)})
+    functionList.append({"name": "AntSystemElitist", "function": lambda x:AntSystem(x,mode="Elitist")})
+    functionList.append({"name": "AntSystemMaxMin", "function": lambda x:AntSystem(x,mode="MaxMin")})
+
+    if(includeGSPH):
+        functionList.append({"name": "GsphFC", "function": lambda x:GSPH(x)})
+    
+    return functionList
+
+def loadBKS() -> dict:
+    with open(TSP_LIB_BKS_FILE,"r") as file:
+        lines = file.read()
+        data = lines.split("\n")
+        
+        bks = {}
+        for instance in data:
+            name, optimal = instance.split(":")
+            name = name.strip()
+            optimal = int(optimal.strip())
+            bks[name.upper()]=optimal
+    return bks
+        
 
 def generateOutput(INSTANCE_NAME,REPO_NAME,RESULTS,OUTPUT_FOLDER="output",RESULTS_FILE="results.csv"):
     currTime = datetime.now()
@@ -92,25 +112,31 @@ def getGapBKS(bks,br):
     return ((br - bks)/bks) * 100
 
 
-def runTest(tspFile,seed,POPULATION_SIZE=500):
-    functionList = generateFunctionList(seed,POPULATION_SIZE)
+def runTest(tspFile,seed,POPULATION_SIZE=500,includeExacts = False):
+    functionList = generateFunctionList(SEED=seed,POPULATION_SIZE=POPULATION_SIZE,includeExacts=includeExacts)
     currTime = datetime.now()
 
     table = open(f"comparation_table_{currTime.day}_{currTime.minute}.csv","w")
     table.write(TABLE_HEADERS)
     instanceIndex = 0
 
-    problem_path = os.path.join(TSP_FILE_PATH, tspFile)
-    instance_name = tspFile.upper().split(".")[0]
-    instance_bks = TSPLIB_BKS[instanceIndex]
+    problem_path = os.path.join(tspFile)
+    #instance_bks = TSPLIB_BKS[instanceIndex]
     instanceIndex += 1
+
+    bksDict = loadBKS()
 
     with open(problem_path) as file:
         problem_str = file.read()
+        problem  = tsplib95.parse(problem_str)
 
         index = 0
-        print()
+
+        instance_name = problem.name.upper()
+        instance_bks = bksDict[instance_name]
+
         print(instance_name,instance_bks)
+
         best_route = []
         best_len = sys.maxsize
         
