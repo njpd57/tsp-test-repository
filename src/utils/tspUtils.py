@@ -55,7 +55,31 @@ TSP_FILE_PATH = "input/"
 TSP_LIB_BKS_FILE = "input/bks.txt"
 TSPLIB_BKS  = []
 
-def generateFunctionList(POPULATION_SIZE=1000,SEED=1,includeExacts=False,includeGSPH=False):
+
+
+
+
+def getUltimateFunctionList(selection,POPULATION_SIZE=1000,SEED=1,includeExacts=False,initial_route=[],improvement_threshold=0.01):
+    print(selection)
+    ULTIMATE_FUNCTION_LIST = {
+        1: lambda x:bruteForce(x),
+        2: lambda x:branchAndBound(x),
+        3: lambda x:heldKarp(x),
+        4: lambda x:nearestNeighbour(x,SEED),
+        5: lambda x:geneticAlgorithm(x,POPULATION_SIZE),
+        6: lambda x:tabuSearch(x),
+        7: lambda x:AntSystem(x),
+        8: lambda x:AntSystem(x,mode="Elitist"),
+        9: lambda x:AntSystem(x,mode="MaxMin"),
+        10: lambda x:GSPH(x),
+        11: lambda x:twoOpt(x,initialRoute=initial_route,improvement_threshold=improvement_threshold),
+        12: lambda x:simulatedAnnealing(x,initial_route)
+    }
+
+    return [ULTIMATE_FUNCTION_LIST[i] for i in selection if i in ULTIMATE_FUNCTION_LIST]
+
+
+def generateFunctionList(selected_algorithms=[0],POPULATION_SIZE=1000,SEED=1,includeExacts=False,includeGSPH=False):
     functionList = []
 
     if(includeExacts):
@@ -182,3 +206,18 @@ def runAllTest(tspFile,seed):
 
 def runTestWithFunction(seed):
     pass
+
+
+def runTest(selectedTspFiles,selectedAlgorithms):
+
+    functionList =getUltimateFunctionList(selection=selectedAlgorithms)
+
+    print(functionList)
+    
+
+    resultados = {
+        "Fuerza Bruta - 565428"
+    }
+    return(resultados)
+    pass
+    #Tiene que retornar una lista de resultados7
