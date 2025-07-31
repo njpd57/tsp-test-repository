@@ -60,23 +60,22 @@ TSPLIB_BKS  = []
 
 
 def getUltimateFunctionList(selection,POPULATION_SIZE=1000,SEED=1,includeExacts=False,initial_route=[],improvement_threshold=0.01):
-    print(selection)
     ULTIMATE_FUNCTION_LIST = {
-        1: lambda x:bruteForce(x),
-        2: lambda x:branchAndBound(x),
-        3: lambda x:heldKarp(x),
-        4: lambda x:nearestNeighbour(x,SEED),
-        5: lambda x:geneticAlgorithm(x,POPULATION_SIZE),
-        6: lambda x:tabuSearch(x),
-        7: lambda x:AntSystem(x),
-        8: lambda x:AntSystem(x,mode="Elitist"),
-        9: lambda x:AntSystem(x,mode="MaxMin"),
-        10: lambda x:GSPH(x),
-        11: lambda x:twoOpt(x,initialRoute=initial_route,improvement_threshold=improvement_threshold),
-        12: lambda x:simulatedAnnealing(x,initial_route)
+        "Fuerza bruta": lambda x:bruteForce(x),
+        "Branch And Bound": lambda x:branchAndBound(x),
+        "Held Karp (Programación Dinamica)": lambda x:heldKarp(x),
+        "Vecino Más Cercano": lambda x:nearestNeighbour(x,SEED),
+        "Algoritmo Genético": lambda x:geneticAlgorithm(x,POPULATION_SIZE),
+        "Búsqueda Tabú": lambda x:tabuSearch(x),
+        "Ant Colony Optimization": lambda x:AntSystem(x),
+        "Ant Colony Elitist": lambda x:AntSystem(x,mode="Elitist"),
+        "Ant Colony Max-Min": lambda x:AntSystem(x,mode="MaxMin"),
+        "GSPH-FC": lambda x:GSPH(x),
+        "2-opt": lambda x:twoOpt(x,initialRoute=initial_route,improvement_threshold=improvement_threshold),
+        "Simulated Annealing": lambda x:simulatedAnnealing(x,INITIAL_ROUTE=initial_route)
     }
 
-    return [ULTIMATE_FUNCTION_LIST[i] for i in selection if i in ULTIMATE_FUNCTION_LIST]
+    return [{'name':i,'function':ULTIMATE_FUNCTION_LIST[i]} for i in selection if i in ULTIMATE_FUNCTION_LIST]
 
 
 def generateFunctionList(selected_algorithms=[0],POPULATION_SIZE=1000,SEED=1,includeExacts=False,includeGSPH=False):
@@ -134,6 +133,12 @@ def generateOutput(INSTANCE_NAME,REPO_NAME,RESULTS,OUTPUT_FOLDER="output",RESULT
     
 def getGapBKS(bks,br):
     return ((br - bks)/bks) * 100
+
+def getInstanceName(fileName):
+    instance_name = fileName.upper().split("/")[1]
+    instance_name = instance_name.split(".")[0]
+    return instance_name
+        
 
 
 def runTest(tspFile,seed,POPULATION_SIZE=500,includeExacts = False):
@@ -208,16 +213,72 @@ def runTestWithFunction(seed):
     pass
 
 
-def runTest(selectedTspFiles,selectedAlgorithms):
-
+def runTestFirstPart(selectedTspFiles,selectedAlgorithms):
     functionList =getUltimateFunctionList(selection=selectedAlgorithms)
 
-    print(functionList)
-    
+    currTime = datetime.now()
+    exportTXT = TABLE_HEADERS
 
-    resultados = {
-        "Fuerza Bruta - 565428"
-    }
-    return(resultados)
-    pass
-    #Tiene que retornar una lista de resultados7
+    bksDict = loadBKS()
+    results = {}
+    for tsp in selectedTspFiles:
+        instance_name = getInstanceName(tsp)
+        instance_bks = bksDict[instance_name]
+
+        with open(tsp) as file:
+            problem_str = file.read()
+
+            for functionDict in functionList:
+                result = functionDict.get("function")(problem_str)
+
+                #Generar salida estándar
+                generateOutput(instance_name,functionDict.get("name"),result,OUTPUT_FOLDER,RESULTS_FILE)
+
+                cost = result.get("cost")  
+                tour = result.get("tour") 
+                #Obtener GAPBKS
+                gapbks = getGapBKS(instance_bks,cost)
+            
+                #Almacenar resultados
+                exportTXT = exportTXT + (f"{instance_name};{functionDict.get("name")};{cost};{instance_bks};{gapbks};{results.get("duration")}\n")
+
+                results[f"{instance_name} - {functionDict.get("name")} - {cost}"] = [tour,tsp]
+                
+    return(results)
+
+def runTestSecondPart(results_to_optimize,optimize_algorithms):
+
+
+    bksDict = loadBKS()
+    results = {}
+
+
+    for result in results_to_optimize:
+        instance_name = getInstanceName(result.get("tsp"))
+        instance_bks = bksDict[instance_name]
+
+        with open(result.get("tsp")) as file:
+            problem_str = file.read()
+
+            functionList =getUltimateFunctionList(selection=optimize_algorithms,initial_route=result.get("tour"))
+
+            for functionDict in functionList:
+                    result = functionDict.get("function")(problem_str)
+
+                    #Generar salida estándar
+                    #generateOutput(instance_name,functionDict.get("name"),result,OUTPUT_FOLDER,RESULTS_FILE)
+
+                    cost = result.get("cost")  
+                    tour = result.get("tour") 
+                    #Obtener GAPBKS
+                    #gapbks = getGapBKS(instance_bks,cost)
+                
+                    #Almacenar resultados
+                    #exportTXT = exportTXT + (f"{instance_name};{functionDict.get("name")};{cost};{instance_bks};{gapbks};{results.get("duration")}\n")
+
+                    print(cost)
+
+                    results[f"{functionDict.get("name")} - {cost}"] = tour
+
+    print(results)
+    
