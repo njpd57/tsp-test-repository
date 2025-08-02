@@ -12,12 +12,11 @@ def printMatrix(matrix,n):
 def tspLibLoader(problem: str):
     tspProblem = tsplib95.parse(problem)
     n = tspProblem.dimension
-
     dists = [[0] * n for _ in range(n)]
-    for i in range(n):
-        for j in range(i+1, n):
-            dists[i][j] = dists[j][i] = tspProblem.get_weight(start=i+1,end=j+1)
-            pass
+    for i, u in enumerate(tspProblem.get_nodes()):
+        for j, v in enumerate(tspProblem.get_nodes()):
+            if i != j:
+                dists[i][j] = tspProblem.get_weight(u, v)
 
     return [n,dists]
 

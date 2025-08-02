@@ -3,6 +3,8 @@ import time
 import tsp as repoTSP
 
 def getCityFromTSPLIB(problem: tsplib95.models.StandardProblem):
+    if(problem.edge_weight_type !="EUC_2D"):
+        return []
     nodeSize = problem.dimension
     cities = []
     for i in range(nodeSize):

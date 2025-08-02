@@ -55,17 +55,25 @@ TSP_FILE_PATH = "input/"
 TSP_LIB_BKS_FILE = "input/bks.txt"
 TSPLIB_BKS  = []
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 
-
-
-def getUltimateFunctionList(selection,POPULATION_SIZE=1000,SEED=1,includeExacts=False,initial_route=[],improvement_threshold=0.01):
+def getUltimateFunctionList(selection,POPULATION_SIZE=1000,SEED=1,includeExacts=False,initial_route=[],improvement_threshold=0.01,TARGET=450):
     ULTIMATE_FUNCTION_LIST = {
         "Fuerza bruta": lambda x:bruteForce(x),
         "Branch And Bound": lambda x:branchAndBound(x),
         "Held Karp (Programación Dinamica)": lambda x:heldKarp(x),
         "Vecino Más Cercano": lambda x:nearestNeighbour(x,SEED),
-        "Algoritmo Genético": lambda x:geneticAlgorithm(x,POPULATION_SIZE),
+        "Algoritmo Genético": lambda x:geneticAlgorithm(x,POPULATION_SIZE,TARGET=TARGET),
         "Búsqueda Tabú": lambda x:tabuSearch(x),
         "Ant Colony Optimization": lambda x:AntSystem(x),
         "Ant Colony Elitist": lambda x:AntSystem(x,mode="Elitist"),
@@ -214,22 +222,29 @@ def runTestWithFunction(seed):
 
 
 def runTestFirstPart(selectedTspFiles,selectedAlgorithms):
-    functionList =getUltimateFunctionList(selection=selectedAlgorithms)
-
     currTime = datetime.now()
     exportTXT = TABLE_HEADERS
-
     bksDict = loadBKS()
     results = {}
     for tsp in selectedTspFiles:
         instance_name = getInstanceName(tsp)
         instance_bks = bksDict[instance_name]
-
+        
         with open(tsp) as file:
             problem_str = file.read()
 
+            functionList =getUltimateFunctionList(selection=selectedAlgorithms,TARGET=instance_bks)
+
             for functionDict in functionList:
-                result = functionDict.get("function")(problem_str)
+                problem = tsplib95.parse(problem_str)
+                print(f"{bcolors.BOLD}Instancia: {instance_name} ({instance_bks}){bcolors.ENDC} ",end=" ")
+                
+                print(problem.edge_weight_type,end=" ")
+                if("Gen" in functionDict.get("name") and problem.edge_weight_type != "EUC_2D"):
+                    print(f"{bcolors.FAIL} Tipo de problema incompatible {bcolors.ENDC}")
+                    continue
+
+                result = functionDict.get("function")(problem_str)               
 
                 #Generar salida estándar
                 generateOutput(instance_name,functionDict.get("name"),result,OUTPUT_FOLDER,RESULTS_FILE)
@@ -238,6 +253,9 @@ def runTestFirstPart(selectedTspFiles,selectedAlgorithms):
                 tour = result.get("tour") 
                 #Obtener GAPBKS
                 gapbks = getGapBKS(instance_bks,cost)
+
+
+                print(f"{bcolors.OKCYAN}Algoritmo: {functionDict.get("name")}{bcolors.ENDC} - {bcolors.OKGREEN}Costo: {cost}{bcolors.ENDC}, {bcolors.WARNING}GAP: {round(gapbks,2)}{bcolors.ENDC}")
             
                 #Almacenar resultados
                 exportTXT = exportTXT + (f"{instance_name};{functionDict.get("name")};{cost};{instance_bks};{gapbks};{results.get("duration")}\n")
