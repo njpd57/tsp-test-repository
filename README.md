@@ -46,8 +46,8 @@ A continuación se listan los algoritmos recopilados de los repositorios de GitH
 6. 2-opt
 7. Genetic Algorithm
 8. Tabu Search
-9. GSPH
-10. 
+9. Ant System (Min-Max, Elitist)
+10. GSPH
 
 ## Repositorios Seleccionados
 
