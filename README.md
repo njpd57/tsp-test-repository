@@ -38,9 +38,9 @@ El objetivo principal es evaluar y comparar el desempeño de diversos algoritmos
 ## Algoritmos Seleccionados
 A continuación se listan los algoritmos recopilados de los repositorios de GitHub para este proyecto.
 
-1. Exhaustive Search
-2. Branch & Bound
-3. Simulated Annealing
+1. Exhaustive Search [@p13i Traveling-Salesperson-Problem](https://github.com/p13i/Traveling-Salesperson-Problem)
+2. Branch & Bound [@p13i Traveling-Salesperson-Problem](https://github.com/p13i/Traveling-Salesperson-Problem) 
+3. Simulated Annealing [@p13i Traveling-Salesperson-Problem](https://github.com/p13i/Traveling-Salesperson-Problem) 
 4. Nearest Neighbour
 5. Held Karp
 6. 2-opt
