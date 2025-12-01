@@ -42,12 +42,12 @@ A continuación se listan los algoritmos recopilados de los repositorios de GitH
 2. Branch & Bound [@p13i Traveling-Salesperson-Problem](https://github.com/p13i/Traveling-Salesperson-Problem) 
 3. Simulated Annealing [@p13i Traveling-Salesperson-Problem](https://github.com/p13i/Traveling-Salesperson-Problem) 
 4. Nearest Neighbour
-5. Held Karp
-6. 2-opt
-7. Genetic Algorithm
+5. Held Karp [@carl-olin held-karp](https://github.com/carl-olin/held-karp) 
+6. 2-opt [@m3hdi- tsp-with-nn](https://github.com/m3hdi-i/tsp-with-nn)
+7. Genetic Algorithm 
 8. Tabu Search
 9. Ant System (Min-Max, Elitist)
-10. GSPH
+10. GSPH [@incfDevuser gsph-toolkit](https://github.com/incfDevuser/gsph_toolkit)
 
 ## Repositorios Seleccionados
 
