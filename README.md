@@ -39,14 +39,14 @@ El objetivo principal es evaluar y comparar el desempeño de diversos algoritmos
 
 A continuación, se listan los repositorios de GitHub seleccionados para este proyecto:
 
-1. [@p13i Traveling-Salesperson-Problem](https://github.com/p13i/Traveling-Salesperson-Problem) [A]
-2. [@carl-olin held-karp](https://github.com/carl-olin/held-karp) [B]
+1. [@p13i Traveling-Salesperson-Problem](https://github.com/p13i/Traveling-Salesperson-Problem) [A] [Exhaustive Search, Branch & Bound, Simmulated Annhealing] 
+2. [@carl-olin held-karp](https://github.com/carl-olin/held-karp) [B] [Held-Karp]
 3. [@m3hdi- tsp-with-nn](https://github.com/m3hdi-i/tsp-with-nn) [C]
 4. [@pdrm83 py2opt](https://github.com/pdrm83/py2opt) [D]
 5. [@hassanzadehmahdi Traveling-Salesman-Problem-Using-Genetic-Algorithm](https://github.com/hassanzadehmahdi/Traveling-Salesman-Problem-using-Genetic-Algorithm)[E]
-6. [@Xavier-MaYiMing Tabu-Search](https://github.com/Xavier-MaYiMing/Tabu-Search)[F]
-7. [@Josephbakulikira Traveling-Salesman-Algorithm](https://github.com/Josephbakulikira/Traveling-Salesman-Algorithm)[G]
-8. [@incfDevuser gsph-toolkit](https://github.com/incfDevuser/gsph_toolkit)[H]
+6. [@Xavier-MaYiMing Tabu-Search](https://github.com/Xavier-MaYiMing/Tabu-Search)[F] [Tabu Search]
+7. [@Josephbakulikira Traveling-Salesman-Algorithm](https://github.com/Josephbakulikira/Traveling-Salesman-Algorithm)[G] 
+8. [@incfDevuser gsph-toolkit](https://github.com/incfDevuser/gsph_toolkit)[H] [GSPH]
 
 ## Créditos
 
